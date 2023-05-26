@@ -28,8 +28,23 @@ Remember, increasing physical memory may provide temporary relief, but it's not 
 
 ## What this Repository (will) contain(s)
 
-- A script which outputs the total PGA allocation, the PGA usage of inactive sessions and the total amount of inactive sessions to a logfile. The logfile size can be limited.
+\- ```monitor_oracle.sh```:
+An interactive shell-script which outputs the total PGA allocation, the PGA usage of inactive sessions and the total amount of inactive sessions to a logfile. Do not use in cronjob
+
+\- ```monitor_oracle_headless.sh```:
+The headless version of the script above which can be used in 
+
+
+
 - A script which can be used to mail the logfile regularly and purge the logfile to ensure it doesn't clog up the system 
 - A suggestion for a crontab entry
 
 Created by Sebastian Varga (Twitter: https://twitter.com/sebvarga)
+
+## Usage
+
+Put the script 'monitor_oracle.sh' in a folder of your choice. To start, you can just put it in the home-directory. Make sure, you have the appropriate database access rights.
+
+Make the script executeable. In the folder where the script is located, run:
+```chmod +x monitor_oracle.sh```
+
