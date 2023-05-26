@@ -1,0 +1,11 @@
+# Ignore Mac Stuff
+*.DS_Store
+
+# Windows Stuff
+Thumbs.db
+
+# Linux Stuff
+*.swp
+
+# SSH Keys
+*.pem
