@@ -6,6 +6,7 @@
 # By default, the log will rotate when it reaches 100MByte. It will then be zipped and send via email to the specified email address(es).
 # If you don't want to send emails, comment out the send_email function.
 # If an old zip file existst, it will be overwritten by the new one.
+# Some instances of the mail programm do not support the -a flag.
 
 # Configuration
 LOG_FILE="monitor_oracle.log"       # Path to your log file
