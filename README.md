@@ -1,7 +1,5 @@
 # Oracle logging PGA Memory and how it's affected by inactive connections
 
-Disclaimer: Chunks of this repository (including this README) have been aided by ChatGPT and GitHub Copilot X - but everything has been tested on a real life Oracle environment
-
 ## Summary
 This collection of scripts is inspired by a problem occuring in one of my consulting gigs, where we encountered a problem with PGA-memory in Oracle database servers being clogged up by inactive connections.
 
