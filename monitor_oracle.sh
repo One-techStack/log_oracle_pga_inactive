@@ -3,77 +3,31 @@
 # Set the default logfile location
 LOG_FILE=monitor_oracle.log
 
+# Set one or multiple e-mail addresses to send alerts to
+
+EMAIL_ADDRESS=""
+
 # Source the oracle environment. This you may have to adapt to your environment
 . /home/oracle/.bash_profile
 
-# Check for flag --hl which will only use default values and skip the user prompts so it can be used in scripts and cronjobs
-if [ "$1" == "--hl" ]
+# First check if the required environment variables are set.If one of the requirede variable is not set, the script will exit and send a notification mail to the specified e-mail address.
+
+if [ -z "$ORACLE_HOME" ]
 then
-    echo "Using default values"
-else
-    # Prompt for the database name
-    echo "Enter the database name or press enter to use the default (orcl):"
-    read DB_NAME
-
-    # If the user entered a database name, use that, otherwise use the default
-    if [ -z "$DB_NAME" ]
-    then
-        DB_NAME=orcl
-    fi
-
-    # Prompt for the database user
-    echo "Enter the database user or press enter to use the default (system):"
-    read DB_USER
-
-    # If the user entered a database user, use that, otherwise use the default
-    if [ -z "$DB_USER" ]
-    then
-        DB_USER=system
-    fi
-
-    # Prompt for the database password
-    echo "Enter the database password or press enter to use the default (oracle):"
-    read DB_PASS
-
-    # If the user entered a database password, use that, otherwise use the default
-    if [ -z "$DB_PASS" ]
-    then
-        DB_PASS=oracle
-    fi
-
-    # Prompt for the database port
-    echo "Enter the database port or press enter to use the default (1521):"
-    read DB_PORT
-
-    # If the user entered a database port, use that, otherwise use the default
-    if [ -z "$DB_PORT" ]
-    then
-        DB_PORT=1521
-    fi
-
-    # Prompt for the database host
-    echo "Enter the database host or press enter to use the default (localhost):"
-    read DB_HOST
-
-    # If the user entered a database host, use that, otherwise use the default
-    if [ -z "$DB_HOST" ]
-    then
-        DB_HOST=localhost
-    fi
-
-    
+    echo "ORACLE_HOME is not set. Please set the ORACLE_HOME environment variable." >> $LOG_FILE
+    echo "Script will exit." >> $LOG_FILE
+    echo "---- $(date) ----" >> $LOG_FILE
+    mail -s "ORACLE_HOME is not set" $EMAIL_ADDRESS < $LOG_FILE
+    exit
 fi
 
-
-# Prompt for an output filename and path as an alternative to the default.
-
-echo "Enter the logfile name and path or press enter to use the default ($LOG_FILE):"
-read LOG_FILE
-
-# If the user entered a filename, use that, otherwise use the default
-if [ -z "$LOG_FILE" ]
+if [ -z "$ORACLE_SID" ]
 then
-    LOG_FILE=monitor_oracle.log
+    echo "ORACLE_SID is not set. Please set the ORACLE_SID environment variable." >> $LOG_FILE
+    echo "Script will exit." >> $LOG_FILE
+    echo "---- $(date) ----" >> $LOG_FILE
+    mail -s "ORACLE_SID is not set" $EMAIL_ADDRESS < $LOG_FILE
+    exit
 fi
 
 # Print the current date and time
@@ -128,5 +82,5 @@ EOF
 
 # Print the Memory Size of the server
 echo "---- Memory Size ----" >> $LOG_FILE
-free >> $LOG_FILE
+free -h >> $LOG_FILE
 echo "" >> $LOG_FILE
