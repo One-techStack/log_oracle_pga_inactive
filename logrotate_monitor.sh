@@ -20,15 +20,15 @@ EMAIL_LIST=() # Set EMAIL_LIST=("email1@example.com" "email2@example.com") - Add
 function send_email {
   for EMAIL in "${EMAIL_LIST[@]}"; do
     echo "Sending email to $EMAIL"
-    echo "Please find the attached log file." | mutt -a "$ZIP_FILE" -s "Log file" -- $EMAIL
+    echo "Please find the attached log file." | mail -a "$ZIP_FILE" -s "Log file" -- $EMAIL
   done
 }
 
 # Main
 
-# Check if mutt is available, if not, exit
-if ! command -v mutt &> /dev/null; then
-  echo "mutt could not be found. Please install mutt."
+# Check if mail is available, if not, exit
+if ! command -v mail &> /dev/null; then
+  echo "mail could not be found. Please install mail."
   exit
 fi
 
