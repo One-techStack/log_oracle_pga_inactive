@@ -70,6 +70,11 @@ sqlplus -s / as sysdba <<EOF >> $LOG_FILE
 SELECT COUNT(1) FROM gv\$session WHERE status = 'INACTIVE';
 EOF
 
+# Print the total amount of active sessions
+sqlplus -s / as sysdba <<EOF >> $LOG_FILE
+SELECT COUNT(1) FROM gv\$session WHERE status = 'ACTIVE';
+EOF
+
 # Print the current memory usage for all inactive process combined
 sqlplus -s / as sysdba <<EOF >> $LOG_FILE
 SELECT SUM(value/(1024*1024*1024)) as "Inactive_PGA_GB"
@@ -78,6 +83,16 @@ WHERE t.STATISTIC# = n.STATISTIC#
 AND n.name = 'session pga memory' 
 AND s.sid = t.sid
 AND s.status = 'INACTIVE';
+EOF
+
+# Print the current memory usage for all active process combined
+sqlplus -s / as sysdba <<EOF >> $LOG_FILE
+SELECT SUM(value/(1024*1024*1024)) as "Active_PGA_GB"
+FROM v\$sesstat t, v\$statname n, v\$session s 
+WHERE t.STATISTIC# = n.STATISTIC#
+AND n.name = 'session pga memory'
+AND s.sid = t.sid
+AND s.status = 'ACTIVE';
 EOF
 
 # Print the Memory Size of the server

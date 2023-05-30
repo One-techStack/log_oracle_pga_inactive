@@ -1,9 +1,7 @@
 # Oracle logging PGA Memory and how it's affected by inactive connections
 
-Disclaimer: Chunks of this repository (including this README) have been aided by ChatGPT and GitHub Copilot X - but everything has been tested on a real life Oracle environment
-
 ## Summary
-This collection of scripts is inspired by a problem occuring in one of my consulting gigs, where we encountered a problem with PGA-memory in Oracle database servers being clogged up by inactive connections.
+This collection of scripts is inspired by a problem with PGA-memory in Oracle database servers being clogged up by inactive connections.
 
 Inactive connections are held in the PGA-Memory of Oracle servers and each usually only take up a few MBytes of RAM. However, if you have thousands of connections and do not properly close them, they may up being kept on the record of the server.
 
@@ -31,20 +29,34 @@ Remember, increasing physical memory may provide temporary relief, but it's not 
 \- ```monitor_oracle.sh```:
 An interactive shell-script which outputs the total PGA allocation, the PGA usage of inactive sessions and the total amount of inactive sessions to a logfile. Do not use in cronjob
 
-\- ```monitor_oracle_headless.sh```:
-The headless version of the script above which can be used in 
+\- ```logrotate_monitor.sh```:
+The logroatate script
 
-
-
-- A script which can be used to mail the logfile regularly and purge the logfile to ensure it doesn't clog up the system 
-- A suggestion for a crontab entry
-
-Created by Sebastian Varga (Twitter: https://twitter.com/sebvarga)
+\- ```example_crontab```:
+An example on how you can set your cron jobs to run the script (default every 5 minutes) and when to rotate the log file (when 100MByte)
 
 ## Usage
 
 Put the script 'monitor_oracle.sh' in a folder of your choice. To start, you can just put it in the home-directory. Make sure, you have the appropriate database access rights.
 
-Make the script executeable. In the folder where the script is located, run:
+Make the scripts are executeable. In the folder where the script is located, run:
 ```chmod +x monitor_oracle.sh```
+```chmod +x logrotate_monitor.sh```
 
+
+### How to configure crontab:
+Cron jobs for individual users are stored in the cron daemon's spool area, which is typically a directory under `/var/spool/cron` or `/var/spool/cron/crontabs` on most Unix-like systems.
+
+The files in these directories are named after the users to whom they belong, and the permissions are set so that only the user and root can read or write to their respective file.
+
+The `crontab -e` command opens the current user's cron file in the default text editor for modification. Once the changes are saved and the editor is exited, the cron daemon automatically reloads the file and applies any changes.
+
+Remember, these files should not be edited directly, as the changes may not be picked up by the cron daemon. Always use the `crontab` command to interact with these files.
+
+System-wide cron jobs are typically stored in `/etc/crontab` or under the `/etc/cron.d/` directory. These files can only be edited by the root user and are used for system tasks. Users can also place scripts in the `/etc/cron.hourly`, `/etc/cron.daily`, `/etc/cron.weekly`, and `/etc/cron.monthly` directories to have them automatically run at those intervals.
+
+Each of these directories is checked by the cron daemon, and any scripts within them are executed at the specified intervals.
+
+
+
+Created by Sebastian Varga (Twitter: https://twitter.com/sebvarga)

@@ -1,0 +1,10 @@
+# Use the example crontab as is or adapt to your needs.
+# Remember to replace "/path/to/" with the actual path.
+# If you have changed the filenames, please also adapt accordingly
+# Output of the scripts will be redirected to /var/log/messages
+
+# Runs log file monitoring script every hour
+0 * * * * /path/to/logrotate_monitor.sh >> /var/log/messages 2>&1
+
+# Runs oracle monitoring script every 5 minutes
+*/5 * * * * /path/to/monitor_oracle.sh >> /var/log/messages 2>&1
