@@ -37,22 +37,22 @@ echo "---- $(date) ----" >> $LOG_FILE
 # Uncomment the section below, if you want a per process breakdown
 # Careful, this can be a lot of data, don't run this in a cronjob
 
-# sqlplus -s / as sysdba <<EOF >> $LOG_FILE
-# set lines 200
-# set pages 200
-# col sid format 9999
-# col username format a10
-# col osuser format a10
-# col status format a10
-# col module format a10
-# col program format a30
-# select s.sid, s.username, s.osuser, s.status, s.module, p.program, 
-# round((p.value/1024/1024),2) "PGA_MB" 
-# from v\$session s, v\$sesstat t, v\$statname n, v\$process p 
-# where s.sid = t.sid and s.paddr = p.addr and t.statistic# = n.statistic# 
-# and n.name = 'session pga memory' and s.status = 'INACTIVE' order by "PGA_MB" desc;
-# exit;
-# EOF
+sqlplus -s / as sysdba <<EOF >> $LOG_FILE
+set lines 200
+set pages 200
+col sid format 9999
+col username format a10
+col osuser format a10
+col status format a10
+col module format a10
+col program format a30
+select s.sid, s.username, s.osuser, s.status, s.module, p.program, 
+round((p.value/1024/1024),2) "PGA_MB" 
+from v\$session s, v\$sesstat t, v\$statname n, v\$process p 
+where s.sid = t.sid and s.paddr = p.addr and t.statistic# = n.statistic# 
+and n.name = 'session pga memory' and s.status = 'INACTIVE' order by "PGA_MB" desc;
+exit;
+EOF
 
 # End of per process breakdown
 # **********
